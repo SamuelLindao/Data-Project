@@ -1,0 +1,28 @@
+<html>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30vh;
+        margin: 0;
+    }
+</style>
+<head>
+    
+</head>
+
+<body>
+<form action = "{% url 'login' %}" method = "POST">{% csrf_token%}
+    <input type = "text" placeholder="Username..." name = "username">
+    <br>
+    <input type = "password" placeholder="Password..." name = "password">
+    <br>
+    <p><a href="{% url 'register' %}">Sign Up</a>.</p>
+    <input type="submit" name = "Login" value="Login">
+    <br>
+</form>
+
+</body>
+
+</html>
