@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+
 def register(request):
     if request.method == 'GET':
         return render(request, 'register.html')
@@ -33,10 +35,21 @@ def login(request):
         if user:
             django_login(request, user)
 
-            return HttpResponse('Everything is good bro :3')
+            return render(request, 'newpassword.html')
         else:
             return HttpResponse('Wrong username or password')
 
 @login_required(login_url='/auth/login/')
 def plat(request):
-    return HttpResponse('Acessou!!')
+    if request.method == 'GET':
+        return render(request, 'newpassword.html')
+    else:
+        password = request.POST.get('password')
+        confirmPassword = request.POST.get('passwordOne')
+        user = get_object_or_404(User, id=request.user.id)
+        if(password == confirmPassword):
+            user.set_password(password)
+            user.save()
+            return HttpResponse('Deu certo!')
+
+        return HttpResponse('Deu errado!')
